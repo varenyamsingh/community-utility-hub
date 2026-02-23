@@ -29,9 +29,9 @@ export class ItemsService {
           title: true,
           description: true,
           price_per_day: true,
-        }
+        },
       });
-      return items.map(item => ({ ...item, location: null }));
+      return items.map((item) => ({ ...item, location: null }));
     }
   }
 
@@ -64,7 +64,7 @@ export class ItemsService {
           description: data.description || '',
           price_per_day: data.price,
           ownerId: data.ownerId,
-        }
+        },
       });
     }
   }
