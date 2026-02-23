@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // url removed - now configured in prisma.config.ts
+}
+
+model Item {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  price_per_day Float    @default(0)
+  ownerId     String   // User who owns this item
+  // This tells Prisma to ignore this column for standard CRUD 
+  // so we can handle it with raw SQL PostGIS math later
+  location    Unsupported("geography(Point, 4326)")?
+  createdAt   DateTime @default(now())
+
+  bookings    Booking[]
+
+  @@map("items")
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  itemId    String
+  item      Item     @relation(fields: [itemId], references: [id])
+  borrowerId String
+  startDate DateTime
+  endDate   DateTime
+  status    String   @default("pending") // pending, completed, cancelled
+  createdAt DateTime @default(now())
+
+  @@map("bookings")
+}
